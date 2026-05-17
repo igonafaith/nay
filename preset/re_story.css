@@ -116,10 +116,9 @@
   }
 
   /*
-   * Drop cap — huruf pertama paragraf pertama.
-   * Hanya aktif di `.drop-cap` atau `article > p:first-of-type`.
+   * Drop cap — opt-in: tambahkan class `.drop-cap` ke paragraf.
    */
-  & :where(.drop-cap, article > p:first-of-type)::first-letter {
+  & .drop-cap::first-letter {
     font-family: var(--font-heading);
     float: inline-start;
     font-size: 3.5em;
@@ -133,7 +132,7 @@
    * Subtitle / dek — kalimat di bawah judul.
    */
   & .subtitle,
-  & article > p:first-of-type:not(.drop-cap) {
+  & article > p:first-of-type {
     font-size: var(--size-1);
     line-height: 1.55;
     text-indent: 0;
