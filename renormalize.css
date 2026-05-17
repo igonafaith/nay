@@ -1,0 +1,577 @@
+/*! Nay v1.0 | Renormalize - Modern Reset + Normalize
+ *  Standalone reset — scope dan panduan penggunaan ada di README.
+ *
+ *  Sections:
+ *   1. Box Model & Root       5. Links          9. Forms & Interactive
+ *   2. Typography             6. Lists         10. Accessibility & Motion
+ *   3. Layout & Sectioning    7. Media & Embeds 11. Print
+ *   4. Inline Semantics       8. Tables
+ */
+
+
+/* ==========================================================================
+   1. BOX MODEL & ROOT
+   ========================================================================== */
+
+/*
+ * `border-box` universal — padding/border masuk ke dalam width.
+ * Menggunakan inherit supaya komponen bisa opt-out kalau perlu.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+ * Hapus margin/padding bawaan semua elemen.
+ * Lebih aman daripada mengandalkan default tiap browser.
+ */
+*:where(:not(dialog)) {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Root: `rem` dihitung dari sini.
+ * - `text-size-adjust` mencegah auto-resize teks di mobile rotate.
+ * - `tab-size` standarisasi indentasi tab di <pre>/<code>.
+ * - `color-scheme` memberi tahu browser bahwa kita support dark mode.
+ *   Hapus `dark` kalau proyek hanya light-only.
+ */
+:root {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  color-scheme: light dark;
+}
+
+
+/* ==========================================================================
+   2. TYPOGRAPHY
+   ========================================================================== */
+
+/*
+ * Body defaults:
+ * - `line-height: 1.6` lebih nyaman dibaca daripada default 1.2.
+ * - `font-family` stack: system-ui dulu, lalu fallback lengkap.
+ * - `-webkit-font-smoothing` untuk rendering font yang lebih halus di macOS.
+ * - `min-height: 100dvh` (dynamic viewport) agar body selalu minimal 1 layar,
+ *    berguna untuk sticky footer pattern.
+ */
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  line-height: 1.6;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Noto Color Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * Heading: reset size agar semua h1-h6 = body size.
+ * Biarkan design-system / utility class yang atur ukuran.
+ * `text-wrap: balance` mencegah satu kata orphan di baris terakhir.
+ */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  text-wrap: balance;
+}
+
+/*
+ * Paragraf dan konten panjang: `text-wrap: pretty` menghindari
+ * baris terakhir yang terlalu pendek (widows/orphans visual).
+ */
+p, li, figcaption, blockquote, dd, dt {
+  text-wrap: pretty;
+}
+
+/*
+ * Monospace stack untuk code blocks.
+ * Override `font-size` karena browser banyak yang mengecilkan
+ * monospace jadi ~13px secara default.
+ */
+pre, code, kbd, samp {
+  font-family:
+    ui-monospace,
+    "Cascadia Code",
+    "Source Code Pro",
+    Menlo,
+    Consolas,
+    "DejaVu Sans Mono",
+    monospace;
+  font-size: 1em;
+}
+
+/*
+ * <pre> khusus: izinkan wrap supaya tidak overflow horizontal
+ * di layar kecil. Tapi tetap jaga whitespace.
+ */
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/*
+ * <small>: normalize ke 80% (beberapa browser pakai fixed px).
+ */
+small {
+  font-size: 80%;
+}
+
+/*
+ * Subscript & superscript: cegah mereka mengacaukan line-height.
+ */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+/*
+ * Bold normalization: pastikan <b> dan <strong> benar-benar bold
+ * di semua browser (beberapa pakai `bold`, yang lain `700`).
+ */
+b, strong {
+  font-weight: 700;
+}
+
+
+/* ==========================================================================
+   3. LAYOUT & SECTIONING
+   ========================================================================== */
+
+/*
+ * <main> display di IE11.
+ * <details> dan <summary> normalisasi.
+ */
+main {
+  display: block;
+}
+
+summary {
+  display: list-item;
+  cursor: pointer;
+}
+
+/*
+ * <hr>: reset ke border-based agar mudah di-style.
+ * `height: 0` normalisasi Firefox, `color: inherit` untuk IE edge case.
+ */
+hr {
+  height: 0;
+  border: 0;
+  border-top: 1px solid;
+  color: inherit;
+  opacity: 0.25;
+}
+
+
+/* ==========================================================================
+   4. INLINE SEMANTICS
+   ========================================================================== */
+
+/*
+ * <abbr> dengan title: pastikan underline dotted konsisten.
+ */
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/*
+ * <mark>: beri padding kecil agar highlight tidak mepet teks.
+ * wavy underline sebagai indikator non-warna (WCAG 1.4.1) —
+ * SENGAJA berbeda dari abbr[title] yang pakai dotted agar
+ * pengguna buta warna tetap bisa membedakan keduanya.
+ */
+mark {
+  padding-inline: 0.15em;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness: 2px;
+}
+
+
+/* ==========================================================================
+   5. LINKS
+   ========================================================================== */
+
+/*
+ * Link inherit warna dari parent — biar design-system yang tentukan.
+ * `text-underline-offset` memberi jarak underline agar lebih rapi.
+ */
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+  text-underline-offset: 0.15em;
+}
+
+
+/* ==========================================================================
+   6. LISTS
+   ========================================================================== */
+
+/*
+ * Reset list-style hanya pada list yang punya `role="list"` atau
+ * tidak punya role sama sekali (navigasi, dll). Ini menjaga
+ * aksesibilitas — VoiceOver Safari tidak mengumumkan list jika
+ * `list-style: none`, kecuali ada `role="list"`.
+ *
+ * List di dalam <article>, <section>, <main> (konten prosa)
+ * tetap punya bullet/number by default.
+ */
+:where(ul, ol):not([role="list"]) {
+  list-style: none;
+}
+
+:where(article, section, main) :where(ul, ol) {
+  list-style: revert;
+  padding-inline-start: 1.5em;
+}
+
+
+/* ==========================================================================
+   7. MEDIA & EMBEDS
+   ========================================================================== */
+
+/*
+ * Responsive media by default:
+ * - `max-width: 100%` agar tidak overflow container.
+ * - `height: auto` menjaga aspect ratio.
+ * - `display: block` menghilangkan gap bawah (inline baseline).
+ */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/*
+ * object-fit tidak di-set di sini — terlalu opinionated.
+ * cover memotong chart, diagram, infografis. Set per use-case.
+ */
+
+/*
+ * Iframe: responsive tanpa border default.
+ */
+iframe {
+  border: 0;
+  max-width: 100%;
+}
+
+/*
+ * SVG di dalam teks (inline icon): kembalikan ke inline.
+ */
+:where(a, button, label) svg {
+  display: inline;
+  vertical-align: middle;
+}
+
+
+/* ==========================================================================
+   8. TABLES
+   ========================================================================== */
+
+/*
+ * `border-collapse` menghilangkan gap antar cell.
+ * `text-indent` dan `border-color` normalisasi di Chrome.
+ */
+table {
+  border-collapse: collapse;
+  border-color: currentcolor;
+  text-indent: 0;
+}
+
+caption {
+  text-align: start;
+}
+
+th {
+  text-align: inherit;
+  font-weight: 700;
+}
+
+
+/* ==========================================================================
+   9. FORMS & INTERACTIVE
+   ========================================================================== */
+
+/*
+ * Form elements: inherit font dari parent, bukan pakai UA style.
+ * Ini masalah klasik — <input> dan <button> default-nya tidak
+ * mewarisi font-family/font-size dari body.
+ */
+button, input, optgroup, select, textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+/*
+ * <button> dan <select>: hapus text-transform bawaan Firefox.
+ */
+button, select {
+  text-transform: none;
+}
+
+/*
+ * Clickable buttons: pointer cursor.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+ * Disabled state: jelas visual dan interaksinya.
+ */
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/*
+ * Reset tampilan button di iOS Safari.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+/*
+ * <textarea>: hanya resize vertikal agar tidak merusak layout horizontal.
+ * `overflow: auto` menghilangkan scrollbar IE default.
+ */
+textarea {
+  resize: vertical;
+  overflow: auto;
+}
+
+/*
+ * Search input: hapus custom appearance di Chrome & Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  appearance: textfield;
+  outline-offset: -2px;
+}
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+ * File input button styling di WebKit.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/*
+ * Fieldset: beri border minimal dan padding supaya rapi.
+ */
+fieldset {
+  border: 1px solid;
+  border-radius: 0.375em;
+  padding: 0.5em 0.75em;
+}
+
+legend {
+  padding-inline: 0.25em;
+}
+
+/*
+ * <dialog>: reset positioning agar lebih predictable.
+ */
+dialog {
+  padding: 0;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/*
+ * Placeholder: nilai tengah antara Firefox default (0.54, terlalu redup)
+ * dan 1.0 (tidak dapat dibedakan dari value yang diketik user).
+ */
+::placeholder {
+  opacity: 0.65;
+}
+
+/*
+ * Progress & meter normalisasi.
+ */
+progress {
+  vertical-align: baseline;
+}
+meter {
+  vertical-align: baseline;
+}
+
+/*
+ * Selection highlight: gunakan warna yang konsisten.
+ * Ini opsional — hapus kalau mau pakai default browser.
+ */
+::selection {
+  background-color: Highlight;
+  color: HighlightText;
+}
+
+
+/* ==========================================================================
+   10. ACCESSIBILITY & MOTION
+   ========================================================================== */
+
+/*
+ * Smooth scroll — tapi hanya kalau user tidak keberatan dengan motion.
+ * `prefers-reduced-motion: reduce` akan override ini.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/*
+ * Jika user prefer reduced motion: matikan semua animasi & transisi.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * :target — elemen yang dituju lewat anchor link (#id).
+ * `scroll-margin-top` mencegah konten tersembunyi di balik sticky header.
+ * Nilai 2rem adalah safe default; override per-halaman jika perlu.
+ */
+:target {
+  scroll-margin-top: var(--space-l, 2rem);
+}
+
+/*
+ * Focus ring: visible hanya saat keyboard navigation (`:focus-visible`),
+ * tidak saat klik mouse. Style-nya cukup universal — biru + offset.
+ */
+:focus-visible {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/*
+ * Skip-to-content pattern: SR-only by default, muncul saat focus.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: revert;
+  margin: revert;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/*
+ * Hidden attribute: pastikan `[hidden]` benar-benar hidden.
+ * Beberapa browser/display-value bisa override ini.
+ */
+[hidden] {
+  display: none !important;
+}
+
+
+/* ==========================================================================
+   11. PRINT
+   ========================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a, a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}
