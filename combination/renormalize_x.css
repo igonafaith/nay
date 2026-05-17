@@ -1,0 +1,637 @@
+/*! Nay Renormalize + Preset — v4.0.0
+ *  Combination file (reset + opinionated defaults).
+ *  Changelog v4 dan scope warning ada di README.
+ */
+
+
+/* ==========================================================================
+   TOKENS
+   ========================================================================== */
+
+:root {
+  /*
+   * Fluid base: ~14px di 320px viewport → ~17px di 1200px.
+   * Range 3px jauh lebih terasa daripada versi lama (1px, tidak bermakna).
+   * Semua preset menggunakan --base sebagai nama token yang sama.
+   */
+  --base: clamp(0.875rem, 0.8rem + 0.375vw, 1.0625rem);
+
+  /*
+   * Type scale ratio.
+   * v3 pakai ~1.25 (major third) tapi hardcode. Sekarang computed.
+   * Ganti ke 1.2 untuk lebih compact, 1.333 untuk lebih dramatis.
+   */
+  --scale: 1.25;
+
+  --size-1: calc(var(--base) * var(--scale));
+  --size-2: calc(var(--size-1) * var(--scale));
+  --size-3: calc(var(--size-2) * var(--scale));
+  --size-4: calc(var(--size-3) * var(--scale));
+
+  --line-height-base: 1.6;
+
+  /*
+   * Spacing rhythm — sama dengan v3, ditambah --space-xl.
+   */
+  --space-xs: 0.5rem;
+  --space-s:  0.75rem;
+  --space-m:  1.25rem;
+  --space-l:  2rem;
+  --space-xl: 3.5rem;
+
+  /*
+   * Optimal reading width. Ditaruh di :root supaya bisa
+   * dipakai di mana saja: article, main, atau .prose container.
+   */
+  --measure: 65ch;
+
+  /*
+   * Warna semantik — derived dari currentcolor supaya
+   * otomatis benar di light maupun dark mode.
+   */
+  --border-color:  rgba(0, 0, 0, 0.15);
+  --border-color:  color-mix(in srgb, currentcolor 15%, transparent);
+  --surface-color: rgba(0, 0, 0, 0.05);
+  --surface-color: color-mix(in srgb, currentcolor 5%, transparent);
+
+  /*
+   * color-scheme: browser tahu kita support light & dark.
+   * Ini mempengaruhi scrollbar, form controls, dsb.
+   * Hapus `dark` kalau proyek light-only.
+   */
+  color-scheme: light dark;
+
+  /*
+   * --radius-m: satu-satunya radius token yang dipakai di file ini
+   * (pre dan blockquote). Token yang lebih granular (--radius-s/l)
+   * dan transition tokens milik theme/design-system layer, bukan normalize.
+   */
+  --radius-m: 0.375rem;
+}
+
+
+/* ==========================================================================
+   BOX MODEL & RESET
+   v3 DNA: dipertahankan, hanya diperluas.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul, figure, blockquote, fieldset {
+  margin: 0;
+}
+
+ol, ul, fieldset, legend {
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+/*
+ * Restorasi list di konteks prosa.
+ * Tanpa ini, semua <ul>/<ol> di dalam artikel kehilangan bullet/nomor.
+ * Pattern identik dengan standalone renormalize.css.
+ */
+:where(article, section, main) :where(ul, ol) {
+  list-style: revert;
+  padding-inline-start: 1.5em;
+}
+
+fieldset {
+  border: 0;
+}
+
+
+/* ==========================================================================
+   ROOT & BODY
+   ========================================================================== */
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;  /* cegah auto-resize saat rotate */
+  text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+
+/*
+ * smooth scroll sekarang di sini (bukan di html langsung),
+ * supaya hanya aktif kalau user tidak keberatan dengan motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  min-height: 100vh;          /* fallback */
+  min-height: 100dvh;         /* dynamic viewport — fix Safari mobile */
+  font-family:
+    "Sen",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-size: var(--base);
+  line-height: var(--line-height-base);
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /*
+   * `optimizeLegibility` mengaktifkan kerning + ligature.
+   * v3 pakai `optimizeSpeed` — itu trade readability for speed,
+   * yang kontraproduktif di storytelling.
+   */
+  text-rendering: optimizeLegibility;
+}
+
+
+/* ==========================================================================
+   HEADINGS
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+
+  /*
+   * [baru] balance: mencegah satu kata orphan di baris terakhir heading.
+   * Progressive enhancement — browser lama mengabaikan.
+   */
+  text-wrap: balance;
+}
+
+/*
+ * Scale sekarang computed dari --scale, bukan hardcode.
+ * v3: h1=2.441rem, h2=1.953rem, h3=1.563rem, h4=1.25rem
+ * v4: identik di --scale:1.25 tapi sekarang satu sumber kebenaran.
+ */
+h1 { font-size: var(--size-4); }             /* ~2.44rem */
+h2 { font-size: var(--size-3); }             /* ~1.95rem */
+h3 { font-size: var(--size-2); }             /* ~1.56rem */
+h4 { font-size: var(--size-1); }             /* ~1.25rem */
+h5 { font-size: var(--base); }
+h6 { font-size: calc(var(--base) * 0.8); } /* tidak ikut --scale; label/meta — lebih kecil dari body intentional */
+
+/*
+ * v3 punya `p, q, li, a { font-size: ... }` — ini dihapus.
+ * Semua elemen sudah inherit font-size dari body. Menulis
+ * ulang font-size di selector ini meningkatkan specificity
+ * tanpa manfaat, dan membuat override lebih susah.
+ */
+
+
+/* ==========================================================================
+   BODY TEXT
+   ========================================================================== */
+
+p {
+  /*
+   * [baru] `text-wrap: pretty` menghindari baris terakhir yang
+   * terlalu pendek. `hanging-punctuation` menggantung tanda kutip
+   * ke margin kiri agar alignment teks tetap rata.
+   */
+  text-wrap: pretty;
+  hanging-punctuation: first allow-end;
+}
+
+
+/* ==========================================================================
+   VERTICAL RHYTHM — ADJACENT SIBLING SPACING
+   ========================================================================== */
+
+/*
+ * v3 DNA dipertahankan. Satu perubahan:
+ * dibungkus :where() agar specificity = 0.
+ * Artinya: `.my-component h2 + p { margin-top: 0 }` langsung
+ * menang tanpa perlu menaikkan specificity.
+ */
+:where(h1, h2, h3, h4, h5, h6, p, q, ul, ol, figure, blockquote, pre, details)
++ :where(h1, h2, h3, h4, h5, h6, p, q, ul, ol, figure, blockquote, pre, details) {
+  margin-top: var(--space-m);
+}
+
+
+/* ==========================================================================
+   INLINE SEMANTICS — normalize yang missing di v3
+   ========================================================================== */
+
+b, strong {
+  font-weight: 700;             /* beberapa browser pakai `bold` vs `700` */
+}
+
+small {
+  font-size: 80%;
+}
+
+/*
+ * Sub/sup: cegah mengacaukan line-height parent.
+ */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+mark {
+  padding-inline: 0.15em;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;          /* wavy ≠ abbr[title] dotted — WCAG 1.4.1 */
+  text-decoration-thickness: 2px;
+}
+
+
+/* ==========================================================================
+   LINKS
+   ========================================================================== */
+
+/*
+ * v3 pakai `a { text-decoration: none }` — ini accessibility issue.
+ * WCAG 1.4.1: link harus bisa dibedakan dari teks biasa secara visual,
+ * tidak hanya dengan warna. Underline adalah cara paling universal.
+ *
+ * Kalau kamu mau link tanpa underline di navbar atau komponen tertentu,
+ * lakukan di level komponen:
+ *   .nav a { text-decoration: none }
+ * Bukan di level reset global.
+ */
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;     /* underline tidak memotong descender */
+  text-underline-offset: 0.15em;      /* jarak underline dari teks */
+}
+
+
+/* ==========================================================================
+   MEDIA
+   v3 DNA: dipertahankan tanpa perubahan.
+   ========================================================================== */
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg:not([fill]) {
+  fill: currentColor;
+}
+
+
+/* ==========================================================================
+   FIGURE & CAPTION
+   ========================================================================== */
+
+figure {
+  text-align: center;
+}
+
+figcaption {
+  font-size: 0.875rem;
+  padding-top: var(--space-xs);
+  line-height: 1.4;
+  opacity: 0.72;    /* min 0.72 — di bawahnya berisiko gagal WCAG AA pada teks kecil */
+}
+
+
+/* ==========================================================================
+   BLOCKQUOTE & Q
+   ========================================================================== */
+
+blockquote, q {
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+blockquote {
+  padding-left: var(--space-m);
+
+  /*
+   * v3: `border-left: 4px solid #eee`
+   * #eee hardcode = invisible di dark mode.
+   * Sekarang pakai currentcolor + opacity via variable.
+   */
+  border-left: 4px solid var(--border-color);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  font-style: italic;
+}
+
+/*
+ * [baru] Italic di dalam italic → kembalikan ke normal (konvensi tipografi).
+ */
+blockquote em,
+blockquote i {
+  font-style: normal;
+}
+
+/*
+ * [baru] Citation styling.
+ */
+blockquote cite,
+blockquote footer {
+  display: block;
+  font-size: 0.875rem;
+  font-style: normal;
+  margin-top: var(--space-xs);
+  opacity: 0.72;
+}
+
+blockquote cite::before {
+  content: "— ";
+}
+
+
+/* ==========================================================================
+   CODE & PRE — section baru (v3 tidak punya)
+   ========================================================================== */
+
+/*
+ * Storytelling kadang perlu menampilkan kode (dialog teknis,
+ * cuplikan surat, log — lihat genre techno-thriller, epistolary).
+ * v3 tidak punya styling sama sekali untuk elemen ini.
+ */
+pre, code, kbd, samp {
+  font-family:
+    ui-monospace,
+    "Cascadia Code",
+    "Source Code Pro",
+    Menlo,
+    Consolas,
+    "DejaVu Sans Mono",
+    monospace;
+  font-size: 1em;                 /* normalize: browser sering mengecilkan mono */
+}
+
+code, kbd, samp {
+  font-size: 0.875em;
+  background: var(--surface-color);
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+}
+
+pre {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background: var(--surface-color);
+  padding: var(--space-m);
+  border-radius: var(--radius-m);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+
+/* ==========================================================================
+   TABLE
+   v3 DNA: dipertahankan, ditambah styling dasar.
+   ========================================================================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+th, td {
+  padding: var(--space-xs) var(--space-s);
+  border-bottom: 1px solid var(--border-color);
+  text-align: start;
+}
+
+th {
+  font-weight: 700;
+}
+
+
+/* ==========================================================================
+   LAYOUT SECTIONING
+   v3 DNA: display:block fallback untuk IE. Tetap aman disimpan.
+   ========================================================================== */
+
+header, main, footer, nav, section, aside, article {
+  display: block;
+}
+
+
+/* ==========================================================================
+   FORMS & INTERACTIVE
+   ========================================================================== */
+
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+textarea {
+  resize: vertical;
+}
+
+::placeholder {
+  opacity: 0.65;  /* 0.54 (Firefox default) terlalu redup; 1.0 tidak bisa dibedakan dari value */
+}
+
+
+/* ==========================================================================
+   HR — scene break
+   ========================================================================== */
+
+hr {
+  height: 0;
+  border: 0;
+  border-top: 1px solid var(--border-color);    /* v3 tidak punya, browser default jelek */
+  margin-block: var(--space-l);
+}
+
+
+/* ==========================================================================
+   SELECTION
+   ========================================================================== */
+
+::selection {
+  background-color: Highlight;
+  color: HighlightText;
+}
+
+
+/* ==========================================================================
+   FOCUS
+   ========================================================================== */
+
+:focus-visible {
+  outline: 2px solid Highlight;       /* system color > -webkit-focus-ring-color */
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ==========================================================================
+   ACCESSIBILITY
+   v3 DNA: .visually-hidden/.sr-only dipertahankan.
+   ========================================================================== */
+
+/*
+ * :target — elemen yang dituju lewat anchor (#id).
+ * `scroll-margin-top` mencegah konten tersembunyi di balik sticky/fixed header.
+ */
+:target {
+  scroll-margin-top: var(--space-l);
+}
+
+.visually-hidden,
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — replaced
+   ========================================================================== */
+
+/*
+ * v3 punya media query yang mengubah --font-size-base dan heading sizes
+ * di 768px. Ini menyebabkan lompatan teks yang kasar saat resize.
+ *
+ * v4 menggantinya dengan fluid clamp() di :root, jadi semua ukuran
+ * transisi smooth. Heading otomatis ikut karena computed dari --scale.
+ *
+ * Kalau kamu butuh breakpoint-specific overrides, lakukan di level
+ * komponen — bukan di reset.
+ *
+ * Satu-satunya responsive concern di reset level: memastikan
+ * measure tidak overflow viewport kecil.
+ */
+:where(article, main, .prose) {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--space-m);
+}
+
+/*
+ * Tabel di layar sempit: geser horizontal, jangan overflow keluar container.
+ * `display: block` dibutuhkan agar `overflow-x` bekerja pada elemen table.
+ */
+@media (max-width: 40em) {
+  :where(article, main, .prose) table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+
+/* ==========================================================================
+   PRINT
+   ========================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a, a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}
