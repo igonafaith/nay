@@ -82,4 +82,4 @@ Referensi: Wikipedia, MDN, Arch Wiki.
 
 ---
 
-Lihat [CHANGELOG](CHANGELOG) untuk riwayat perubahan lengkap.
+Lihat [CHANGELOG](CHANGELOG.md) untuk riwayat perubahan lengkap.
