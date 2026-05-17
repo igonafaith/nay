@@ -36,13 +36,41 @@ source order yang menang, hasilnya tidak terduga.
 
 ---
 
-## Preset
+## Cara Import
 
-Semua preset diaplikasikan ke elemen **container**, bukan global:
+**Dengan preset** (paling umum):
 
 ```html
-<body data-preset="story">         <!-- seluruh halaman -->
-<article class="preset-news">      <!-- hanya artikel ini -->
+<link rel="stylesheet" href="/combination/renormalize_x.css">
+<link rel="stylesheet" href="/preset/re_story.css">
+```
+
+**Standalone** (design-system sendiri):
+
+```html
+<link rel="stylesheet" href="/renormalize.css">
+```
+
+> Preset dirancang untuk dipakai bersama `renormalize_x.css`.
+> Jangan import `renormalize.css` + `renormalize_x.css` sekaligus.
+
+---
+
+## Preset
+
+Semua preset diaplikasikan ke elemen **container**, bukan global.
+
+**`<body>` vs `<article>`** — mengaplikasikan preset ke `<body>` akan membatasi lebar
+seluruh halaman (`max-width + margin-inline: auto`). Cocok untuk halaman full-prose
+sederhana. Untuk layout dengan header/nav/footer full-width, gunakan `<article>`:
+
+```html
+<body>
+  <header>...</header>
+  <main>
+    <article class="preset-story">...</article>
+  </main>
+</body>
 ```
 
 Override font per-preset:
@@ -75,6 +103,9 @@ Referensi: Reuters, NYT, Kompas.
 Karakteristik: generous whitespace, literary, immersive reading.\
 Referensi: Medium, Longreads, The New Yorker.
 
+> **Drop cap** bersifat opt-in. Tambahkan class `.drop-cap` ke paragraf yang
+> diinginkan — tidak otomatis diterapkan ke paragraf pertama.
+
 ### `re_wiki.css` — Ensiklopedis / Referensi
 
 Karakteristik: dense, hierarchical, scannable, reference-grade.\
@@ -82,4 +113,18 @@ Referensi: Wikipedia, MDN, Arch Wiki.
 
 ---
 
-Lihat [CHANGELOG](CHANGELOG.md) untuk riwayat perubahan lengkap.
+## Browser Support
+
+Preset memakai **native CSS nesting** ([Baseline 2023](https://caniuse.com/css-nesting)).
+Browser minimum: Chrome 112+, Firefox 117+, Safari 16.5+.
+
+Jika perlu support browser lebih lama, gunakan PostCSS dengan
+[`postcss-nesting`](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-nesting)
+untuk mengompilasi nesting ke CSS biasa.
+
+> `renormalize_x.css` sendiri sudah konservatif (fallback `100vh`, fallback `color-mix()`).
+> Preset sengaja modern-only karena bergantung pada nesting native.
+
+---
+
+Lihat [CHANGELOG](CHANGELOG) untuk riwayat perubahan lengkap.
