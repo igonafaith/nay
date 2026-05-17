@@ -96,7 +96,7 @@ ol, ul {
 /*
  * Restorasi list di konteks prosa.
  * Tanpa ini, semua <ul>/<ol> di dalam artikel kehilangan bullet/nomor.
- * Pattern identik dengan standalone renormalize.css.
+ * Pattern identik dengan renormalize.css.
  */
 :where(article, section, main) :where(ul, ol) {
   list-style: revert;
