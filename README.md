@@ -3,6 +3,8 @@
 Reset dan normalize CSS dengan lima preset tipografi untuk berbagai konteks konten.
 Dirancang agar keterbacaan, aksesibilitas, dan responsivitas menjadi *default*.
 
+**Info**: Reset + Normalize + Preset Asumsi Font dan Setting lainnya diimport terpisah.
+
 ---
 
 ## Struktur File
