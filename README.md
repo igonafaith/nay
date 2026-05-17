@@ -10,9 +10,9 @@ Dirancang agar keterbacaan, aksesibilitas, dan responsivitas menjadi *default*.
 ## Struktur File
 
 ```
-renormalize.css           — standalone reset (utility-first, tanpa opini heading)
+renormalize.css           — reset bersih, dipakai bersama salah satu preset
 combination/
-  renormalize_x.css       — reset + opinionated defaults (dipakai bersama preset)
+  renormalize_x.css       — all-in-one: reset + opinionated defaults (standalone)
 preset/
   re_dev.css              — developer / teknikal
   re_mixed.css            — general purpose / konten campuran
@@ -31,27 +31,27 @@ source order yang menang, hasilnya tidak terduga.
 
 | File | Kapan pakai |
 |---|---|
-| `renormalize.css` | Proyek dengan design-system sendiri. Reset bersih, heading tanpa opini. |
-| `renormalize_x.css` | Proyek yang memakai salah satu preset di bawah ini. |
+| `renormalize.css` | Dipakai bersama salah satu preset. Reset bersih, preset yang menangani tipografi. |
+| `renormalize_x.css` | All-in-one. Reset + opinionated defaults sudah termasuk, tanpa preset terpisah. |
 
 ---
 
 ## Cara Import
 
-**Dengan preset** (paling umum):
-
-```html
-<link rel="stylesheet" href="/combination/renormalize_x.css">
-<link rel="stylesheet" href="/preset/re_story.css">
-```
-
-**Standalone** (design-system sendiri):
+**Modular** (reset + preset):
 
 ```html
 <link rel="stylesheet" href="/renormalize.css">
+<link rel="stylesheet" href="/preset/re_story.css">
 ```
 
-> Preset dirancang untuk dipakai bersama `renormalize_x.css`.
+**All-in-one** (reset + defaults sudah termasuk):
+
+```html
+<link rel="stylesheet" href="/combination/renormalize_x.css">
+```
+
+> Preset dirancang untuk dipakai bersama `renormalize.css`.
 > Jangan import `renormalize.css` + `renormalize_x.css` sekaligus.
 
 ---
@@ -127,4 +127,4 @@ untuk mengompilasi nesting ke CSS biasa.
 
 ---
 
-Lihat [CHANGELOG](CHANGELOG) untuk riwayat perubahan lengkap.
+Lihat [CHANGELOG](CHANGELOG.md) untuk riwayat perubahan lengkap.
