@@ -22,6 +22,9 @@
   opsi PostCSS untuk support browser lama.
 - Catatan drop cap di deskripsi `re_story.css`.
 - Fix link CHANGELOG (`CHANGELOG.md` → `CHANGELOG`).
+- Koreksi arsitektur di README: `renormalize.css` dipakai bersama `preset/*.css`
+  (modular); `combination/renormalize_x.css` adalah all-in-one standalone tanpa
+  preset terpisah. Sebelumnya terbalik.
 
 ---
 
