@@ -28,7 +28,9 @@
   --space-xl:  3rem;
   --space-2xl: 4.5rem;
 
+  --surface-subtle: rgba(0, 0, 0, 0.04);
   --surface-subtle: color-mix(in srgb, currentcolor 4%, transparent);
+  --border-subtle:  rgba(0, 0, 0, 0.10);
   --border-subtle:  color-mix(in srgb, currentcolor 10%, transparent);
 
   /* -- base -------------------------------------------------------------- */
