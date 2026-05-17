@@ -1,0 +1,310 @@
+/*! re_story.css — Narasi / Cerita Panjang
+ *  Karakteristik, referensi visual, dan cara pakai ada di README.
+ */
+
+.preset-story,
+[data-preset="story"] {
+
+  /* -- tokens ------------------------------------------------------------ */
+  --font-heading: "Mozilla Headline", Georgia, "Times New Roman", serif;
+  --font-body:    "Sen", Georgia, "Times New Roman", serif;
+  --font-mono:    ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  --base:     1.125rem;    /* 18px — sedikit lebih besar untuk kenyamanan */
+  --scale:    1.25;        /* major third — lebih dramatis */
+  --leading:  1.75;        /* lebih longgar, nyaman baca panjang */
+  --measure:  60ch;        /* lebih sempit, mata tidak capek bolak-balik */
+
+  --size-1:   calc(var(--base) * var(--scale));
+  --size-2:   calc(var(--size-1) * var(--scale));
+  --size-3:   calc(var(--size-2) * var(--scale));
+  --size-4:   calc(var(--size-3) * var(--scale));
+  --size-5:   calc(var(--size-4) * var(--scale));
+
+  --space-xs:  0.25rem;
+  --space-s:   0.5rem;
+  --space-m:   1.25rem;
+  --space-l:   2rem;
+  --space-xl:  3.5rem;
+  --space-2xl: 5rem;
+
+  /* -- base -------------------------------------------------------------- */
+  font-family: var(--font-body);
+  font-size: var(--base);
+  line-height: var(--leading);
+  max-width: var(--measure);
+  margin-inline: auto;
+
+  /* -- headings ---------------------------------------------------------- */
+
+  & :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    margin-block-end: var(--space-m);
+  }
+
+  /*
+   * H1 — judul cerita: besar, serif, klasik.
+   * Font-weight 400 (bukan bold) memberi kesan editorial/literary.
+   */
+  & h1 {
+    font-size: var(--size-5);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-block-end: var(--space-l);
+    text-align: center;
+  }
+
+  & h2 {
+    font-size: var(--size-3);
+    font-weight: 400;
+    font-style: italic;
+    margin-block-start: var(--space-2xl);
+    text-align: center;
+  }
+
+  & h3 {
+    font-size: var(--size-2);
+    font-weight: 600;
+    margin-block-start: var(--space-xl);
+  }
+
+  & h4 {
+    font-size: var(--size-1);
+    font-weight: 600;
+    margin-block-start: var(--space-l);
+  }
+
+  & h5 {
+    font-size: var(--base);
+    font-weight: 700;
+    margin-block-start: var(--space-l);
+  }
+
+  & h6 {
+    font-size: var(--base);
+    font-style: italic;
+    font-weight: 400;
+    margin-block-start: var(--space-l);
+  }
+
+  /* -- body text --------------------------------------------------------- */
+
+  & p {
+    margin-block-end: var(--space-m);
+    hanging-punctuation: first allow-end last;
+  }
+
+  /*
+   * Paragraf setelah paragraf: indentasi ala buku,
+   * tanpa margin extra. Ini pola klasik prosa panjang.
+   */
+  & p + p {
+    text-indent: 1.5em;
+    margin-block-start: 0;
+  }
+
+  /*
+   * Reset indent setelah elemen non-paragraf.
+   * Konvensi buku: paragraf pertama setelah heading/quote/figure
+   * tidak diindent. Tanpa ini, <blockquote> → <p> → <p>
+   * menghasilkan indent yang inconsistent secara visual.
+   */
+  & :where(figure, blockquote, pre, hr) + p {
+    text-indent: 0;
+  }
+
+  /*
+   * Drop cap — huruf pertama paragraf pertama.
+   * Hanya aktif di `.drop-cap` atau `article > p:first-of-type`.
+   */
+  & :where(.drop-cap, article > p:first-of-type)::first-letter {
+    font-family: var(--font-heading);
+    float: inline-start;
+    font-size: 3.5em;
+    font-weight: 700;
+    line-height: 0.8;
+    padding-inline-end: 0.08em;
+    margin-block-start: 0.05em;
+  }
+
+  /*
+   * Subtitle / dek — kalimat di bawah judul.
+   */
+  & .subtitle,
+  & article > p:first-of-type:not(.drop-cap) {
+    font-size: var(--size-1);
+    line-height: 1.55;
+    text-indent: 0;
+  }
+
+  /* -- blockquote: literary style ---------------------------------------- */
+
+  /*
+   * Blockquote cerita: italic, indented, tanpa border kiri —
+   * lebih halus, seperti di novel.
+   */
+  & blockquote {
+    font-style: italic;
+    font-size: var(--size-1);
+    line-height: 1.55;
+    margin-block: var(--space-l);
+    margin-inline: var(--space-l);
+  }
+
+  & blockquote em,
+  & blockquote i {
+    font-style: normal; /* inverse italic di dalam italic */
+  }
+
+  & blockquote cite,
+  & blockquote footer {
+    display: block;
+    font-size: var(--base);
+    font-style: normal;
+    text-align: end;
+    margin-block-start: var(--space-s);
+    opacity: 0.72;
+  }
+
+  & blockquote cite::before {
+    content: "— ";
+  }
+
+  /* -- verse / poetry ---------------------------------------------------- */
+
+  & .verse,
+  & [data-type="verse"] {
+    font-style: italic;
+    white-space: pre-line;
+    margin-inline: auto;
+    text-align: center;
+    max-width: 40ch;
+    margin-block: var(--space-xl);
+    line-height: 1.8;
+  }
+
+  /* -- code -------------------------------------------------------------- */
+
+  & :where(code, kbd, samp) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: color-mix(in srgb, currentcolor 6%, transparent);
+    padding: 0.1em 0.3em;
+    border-radius: 0.2em;
+  }
+
+  & pre {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    background: color-mix(in srgb, currentcolor 4%, transparent);
+    padding: var(--space-m) var(--space-l);
+    border-radius: 0.25rem;
+    margin-block: var(--space-l);
+  }
+
+  & pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* -- lists ------------------------------------------------------------- */
+
+  & :where(ul, ol) {
+    margin-block-end: var(--space-m);
+    padding-inline-start: 1.5em;
+  }
+
+  & li + li {
+    margin-block-start: var(--space-s);
+  }
+
+  /* -- figure ------------------------------------------------------------ */
+
+  & figure {
+    margin-block: var(--space-xl);
+  }
+
+  & figcaption {
+    font-size: 0.875rem;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.45;
+    margin-block-start: var(--space-m);
+    opacity: 0.72;
+  }
+
+  /* -- hr: scene break / section divider --------------------------------- */
+
+  /*
+   * Tiga titik centered — pola klasik pemisah scene
+   * di novel dan short stories.
+   */
+  & hr {
+    border: 0;
+    text-align: center;
+    margin-block: var(--space-2xl);
+    opacity: 0.4;
+  }
+
+  & hr::after {
+    content: "⁕  ⁕  ⁕";
+    letter-spacing: 0.5em;
+  }
+
+  /* -- table ------------------------------------------------------------- */
+
+  & table {
+    width: 100%;
+    font-size: 0.9375rem;
+    margin-block: var(--space-l);
+  }
+
+  & th, & td {
+    padding: var(--space-s) var(--space-m);
+    border-block-end: 1px solid color-mix(in srgb, currentcolor 10%, transparent);
+    text-align: start;
+  }
+
+  & thead th {
+    font-style: italic;
+    font-weight: 400;
+    opacity: 0.72;
+  }
+
+  /* -- responsive ---------------------------------------------------------- */
+
+  @media (max-width: 40em) {
+    /*
+     * H1 story bisa mencapai ~55px (size-5 @ scale 1.25, base 1.125rem).
+     * Di layar 320–480px, ini terlalu besar dan memakan ruang.
+     * Clamp menjaga ukuran dramatis tapi tetap proporsional.
+     */
+    & h1 {
+      font-size: clamp(1.75rem, 8vw, var(--size-5));
+      text-align: start; /* center pada layar kecil bisa awkward */
+    }
+
+    & h2 {
+      font-size: clamp(1.25rem, 5.5vw, var(--size-3));
+    }
+
+    /*
+     * Blockquote story punya margin-inline yang lebar.
+     * Di mobile, kurangi agar teks tidak terlalu sempit.
+     */
+    & blockquote {
+      margin-inline: 0;
+    }
+
+    /*
+     * Tabel: horizontal scroll.
+     */
+    & table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+}
