@@ -1,5 +1,30 @@
 # Changelog
 
+## renormalize.css — v1.1.1 / renormalize_x.css — v4.0.2 / preset — v1.2
+
+### Fix
+
+- Header `renormalize.css` diperbarui ke v1.1 (sebelumnya masih tercantum v1.0).
+- Header `renormalize_x.css` diperbarui ke v4.0.1 (sebelumnya masih v4.0.0).
+- `color-mix()` token di `re_dev.css` (`--code-bg`, `--code-border`),
+  `re_mixed.css` (`--surface-subtle`, `--border-subtle`), dan
+  `re_wiki.css` (`--surface-subtle`, `--border-subtle`) sekarang punya
+  fallback `rgba()` sebelum `color-mix()`. Konsisten dengan pola di `renormalize_x.css`.
+- Drop cap di `re_story.css` dijadikan opt-in (`& .drop-cap::first-letter`).
+  Sebelumnya otomatis aktif di `article > p:first-of-type` tanpa class.
+
+### Dokumentasi (README)
+
+- Tambah section **Cara Import** dengan contoh `<link>` yang eksplisit.
+- Tambah catatan **body vs article**: `<body data-preset>` cocok untuk halaman
+  full-prose; untuk layout serius gunakan `<article class="preset-X">`.
+- Tambah section **Browser Support**: preset butuh CSS nesting (Baseline 2023),
+  opsi PostCSS untuk support browser lama.
+- Catatan drop cap di deskripsi `re_story.css`.
+- Fix link CHANGELOG (`CHANGELOG.md` → `CHANGELOG`).
+
+---
+
 ## renormalize.css — v1.1
 
 ### Fix
